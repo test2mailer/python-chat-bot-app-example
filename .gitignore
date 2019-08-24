@@ -1,0 +1,11 @@
+.vscode/
+*.pyc
+.idea/
+__pycache__/
+*.db
+.DS_Store
+venv/
+static/node_modules/
+package-lock.json
+db.*
+*.pickle

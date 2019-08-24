@@ -1,0 +1,101 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <title>ChatBot Messaging</title>
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='node_modules/bootstrap/dist/css/bootstrap.min.css') }}" >
+     <!-- Font-awesome CSS -->
+    <link href="{{ url_for('static', filename='node_modules/font-awesome/css/font-awesome.min.css') }}" type="text/css" rel="stylesheet">
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}" >
+  </head>
+  <body class="bg-light">
+    <div class="container">
+<h3 class=" text-center">ChatBot Messaging</h3>
+<div class="messaging">
+      <div class="inbox_msg">
+
+        <div class="mesgs">
+          <div id="chatBox" class="msg_history">
+
+          </div>
+          <div class="type_msg">
+            <div id="userInput" class="input_msg_write">
+              <input type="text" id="textInput" class="write_msg" placeholder="Type a message" />
+              <button id="buttonInput" class="msg_send_btn" type="button"><i class="fa fa-paper-plane-o" aria-hidden="true"></i></button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+
+      <p class="text-center top_spac"> Design by <a target="_blank" href="#">Mr. Joe</a></p>
+
+    </div></div>
+
+
+    <!-- Optional JavaScript -->
+    <!-- jQuery first, then Bootstrap JS then moment.js, -->
+    <script src="{{ url_for('static', filename='node_modules/jquery/dist/jquery.min.js') }}"></script>
+    <script src="{{ url_for('static', filename='node_modules/bootstrap/dist/js/bootstrap.min.js') }}"></script>
+    <script src="{{ url_for('static', filename='node_modules/moment/min/moment.min.js') }}"></script>
+    moment.min
+    <script>
+
+
+      const messages = document.getElementById('chatBox');
+      function getTime(){
+      return   moment().format("YYYY-MM-DD HH:mm:ss");
+      }
+      function scrollToBottom() {
+      messages.scrollTop = messages.scrollHeight;
+      }
+
+      function getChatterBotMsg(data){
+        var botHtml ='<div class="incoming_msg">';
+        botHtml +='<div class="incoming_msg_img"> <img src="{{ url_for('static', filename='images/bot.png') }}" alt="sunil"> </div>';
+        botHtml +='<div class="received_msg">';
+        botHtml +='<div class="received_withd_msg">';
+        botHtml +='<p>'+data+'</p>';
+        botHtml +='<span class="time_date"> '+getTime()+'</span></div>';
+        botHtml +='</div>';
+        botHtml +='</div>';
+        $('#chatBox').append(botHtml);
+        scrollToBottom();
+      }
+
+      function getBotResponse(){
+        var rawText = $('#textInput').val();
+        var userHtml ='<div class="outgoing_msg">';
+        userHtml +='<div class="sent_msg">';
+        userHtml +='<p>'+rawText+'</p>';
+        userHtml +='<span class="time_date">'+getTime()+'</span></div>';
+        userHtml +='</div>';
+        $('#textInput').val('');
+        $('#chatBox').append(userHtml);
+        scrollToBottom();
+
+        $.get('/get',{msg: rawText }, function(data) {
+          console.log('data = ',data)
+            getChatterBotMsg(data);
+        });
+      }
+
+      getChatterBotMsg("Hi! I am ChatBot.");
+
+      $('#textInput').on('keypress',function(e){
+        if(e.which == 13){
+          getBotResponse();
+        }
+      });
+
+      $('#buttonInput').on('click',function(e){
+          getBotResponse();
+      });
+
+    </script>
+  </body>
+</html>
